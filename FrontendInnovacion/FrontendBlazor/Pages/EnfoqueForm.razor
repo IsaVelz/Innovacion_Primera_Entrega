@@ -1,0 +1,89 @@
+@page "/enfoqueform/{id:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Enfoque</PageTitle>
+
+@code {
+    [Parameter] public int? id { get; set; } // Parámetro opcional para el ID (editar o crear)
+    private FrontendBlazor.Models.Enfoque enfoque = new FrontendBlazor.Models.Enfoque
+    {
+        Nombre = "",
+        Descripcion = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos de Enfoque si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (id.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.Enfoque>($"api/Enfoque/{id}");
+
+            if (resultado != null)
+            {
+                enfoque = resultado;
+            }
+            else
+            {
+                // Manejar el caso en que no se encuentre el Enfoque o la API devuelva null
+                Navigation.NavigateTo("/enfoque");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar un Enfoque
+    private async Task GuardarEnfoque()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/Enfoque/{id}", enfoque);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/Enfoque", enfoque);
+        }
+
+        // Redirigir a la lista de Enfoques después de guardar
+        Navigation.NavigateTo("/enfoque");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/enfoque");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar Enfoque" : "Nuevo Enfoque")</strong>
+            </h3>
+
+            <form>
+                <div class="mb-3">
+                    <label for="nombreEnfoque" class="form-label fw-bold">Nombre</label>
+                    <input type="text" id="nombreEnfoque" class="form-control" placeholder="Nombre del enfoque"
+                        @bind="enfoque.Nombre" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcionEnfoque" class="form-label fw-bold">Descripción</label>
+                    <input type="text" id="descripcionEnfoque" class="form-control" placeholder="Descripción del enfoque"
+                        @bind="enfoque.Descripcion" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarEnfoque">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

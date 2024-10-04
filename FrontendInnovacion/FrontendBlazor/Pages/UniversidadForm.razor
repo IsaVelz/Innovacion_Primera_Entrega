@@ -1,0 +1,97 @@
+@page "/universidad/{id:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Universidad</PageTitle>
+
+@code {
+    [Parameter] public int? id { get; set; } // Parámetro opcional para el ID (editar o crear)
+    private FrontendBlazor.Models.Universidad universidad = new FrontendBlazor.Models.Universidad
+    {
+        Nombre = "",
+        Tipo = "",
+        Ciudad = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos de la universidad si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (id.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.Universidad>($"api/universidad/{id}");
+
+            if (resultado != null)
+            {
+                universidad = resultado;
+            }
+            else
+            {
+                // Aquí puedes manejar el caso en que no se encuentre la universidad o la API devuelva null
+                Navigation.NavigateTo("/universidades");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar una universidad
+    private async Task GuardarUniversidad()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/universidad/{id}", universidad);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/universidad", universidad);
+        }
+
+        // Redirigir a la lista de universidades después de guardar
+        Navigation.NavigateTo("/universidades");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/universidades");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Encabezado del formulario con color púrpura -->
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar Universidad" : "Nueva Universidad")</strong>
+            </h3>
+            
+            <form>
+                <div class="mb-3">
+                    <label for="nombreUniversidad" class="form-label fw-bold">Nombre</label>
+                    <!-- Borde púrpura en los campos de texto -->
+                    <input type="text" id="nombreUniversidad" class="form-control" placeholder="Nombre de la universidad" @bind="universidad.Nombre" style="border: 1px solid #6a0dad; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="tipoUniversidad" class="form-label  fw-bold">Tipo</label>
+                    <input type="text" id="tipoUniversidad" class="form-control" placeholder="Pública o Privada" @bind="universidad.Tipo" style="border: 1px solid #6a0dad; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="ciudadUniversidad" class="form-label  fw-bold">Ciudad</label>
+                    <input type="text" id="ciudadUniversidad" class="form-control" placeholder="Ciudad de la universidad" @bind="universidad.Ciudad" style="border: 1px solid #6a0dad; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);">
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <!-- Botón Guardar con color púrpura y sombra -->
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarUniversidad">
+                        Guardar
+                    </button>
+                    <!-- Botón Salir con estilo gris y sombra -->
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

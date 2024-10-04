@@ -1,0 +1,96 @@
+@page "/practicaestrategiaform/{id:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Practica Estrategia</PageTitle>
+
+@code {
+    [Parameter] public int? id { get; set; } // Parámetro opcional para el ID (editar o crear)
+    private FrontendBlazor.Models.PracticaEstrategia practicaEstrategia = new FrontendBlazor.Models.PracticaEstrategia
+    {
+        Tipo = "",
+        Nombre = "",
+        Descripcion = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos de PracticaEstrategia si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (id.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.PracticaEstrategia>($"api/PracticaEstrategia/{id}");
+
+            if (resultado != null)
+            {
+                practicaEstrategia = resultado;
+            }
+            else
+            {
+                // Manejar el caso en que no se encuentre la PracticaEstrategia o la API devuelva null
+                Navigation.NavigateTo("/practicaestrategia");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar una PracticaEstrategia
+    private async Task GuardarPracticaEstrategia()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/PracticaEstrategia/{id}", practicaEstrategia);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/PracticaEstrategia", practicaEstrategia);
+        }
+
+        // Redirigir a la lista de PracticaEstrategias después de guardar
+        Navigation.NavigateTo("/practicaestrategia");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/practicaestrategia");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar Practica Estrategia" : "Nueva Practica Estrategia")</strong>
+            </h3>
+
+            <form>
+                <div class="mb-3">
+                    <label for="tipoPracticaEstrategia" class="form-label fw-bold">Tipo</label>
+                    <input type="text" id="tipoPracticaEstrategia" class="form-control" placeholder="Tipo"
+                        @bind="practicaEstrategia.Tipo" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="nombrePracticaEstrategia" class="form-label fw-bold">Nombre</label>
+                    <input type="text" id="nombrePracticaEstrategia" class="form-control" placeholder="Nombre de la práctica"
+                        @bind="practicaEstrategia.Nombre" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcionPracticaEstrategia" class="form-label fw-bold">Descripción</label>
+                    <input type="text" id="descripcionPracticaEstrategia" class="form-control" placeholder="Descripción de la práctica"
+                        @bind="practicaEstrategia.Descripcion" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarPracticaEstrategia">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

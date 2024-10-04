@@ -1,0 +1,155 @@
+@page "/areaconocimiento"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+<PageTitle>Area Conocimiento</PageTitle>
+
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<h3><b>Lista de Áreas de Conocimiento</b></h3>
+
+<!-- Botón para crear una nueva Área de Conocimiento -->
+<button class="btn mb-4" style="background-color: #6a0dad; color: white; border-color: #6a0dad;" @onclick="CrearNuevaAreaConocimiento">
+    <i class="fas fa-plus"></i> Nueva Área de Conocimiento
+</button>
+</div>
+
+@if (areasConocimiento == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Gran Área</th>
+                <th>Área</th>
+                <th>Disciplina</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var area in areasConocimiento)
+            {
+                <tr>
+                    <td>@area.Id</td>
+                    <td>@area.GranArea</td>
+                    <td>@area.Area</td>
+                    <td>@area.Disciplina</td>
+                    <td>
+                        <!-- Botón para editar -->
+                        <button class="btn btn-primary btn-sm mr-2" @onclick="() => EditarAreaConocimiento(area.Id)">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <!-- Botón para eliminar con confirmación -->
+                        <button class="btn btn-danger btn-sm" @onclick="() => ConfirmarEliminarAreaConocimiento(area.Id)">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<FrontendBlazor.Models.AreaConocimiento>? areasConocimiento;
+
+    // Cargar las áreas de conocimiento al iniciar
+    protected override async Task OnInitializedAsync()
+    {
+        areasConocimiento = await Http.GetFromJsonAsync<List<FrontendBlazor.Models.AreaConocimiento>>("api/AreaConocimiento");
+    }
+
+    // Método para redirigir al formulario de creación de un área de conocimiento
+    private void CrearNuevaAreaConocimiento()
+    {
+        Navigation.NavigateTo("/areaconocimientoform");
+    }
+
+    // Método para redirigir al formulario de edición de un área de conocimiento
+    private void EditarAreaConocimiento(int id)
+    {
+        Navigation.NavigateTo($"/areaconocimientoform/{id}");
+    }
+
+    // Método para confirmar y eliminar un área de conocimiento
+    private async Task ConfirmarEliminarAreaConocimiento(int id)
+    {
+        // Mostrar la ventana de confirmación antes de eliminar
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro de que deseas eliminar esta Área de Conocimiento?");
+
+        if (confirmado)
+        {
+            await EliminarAreaConocimiento(id);
+        }
+    }
+
+    // Método para eliminar un área de conocimiento
+    private async Task EliminarAreaConocimiento(int id)
+    {
+        await Http.DeleteAsync($"api/AreaConocimiento/{id}");
+        areasConocimiento = await Http.GetFromJsonAsync<List<FrontendBlazor.Models.AreaConocimiento>>("api/AreaConocimiento");
+    }
+}
+
+<style>
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    thead {
+        background: linear-gradient(45deg, #6a0dad, #9b59b6);
+        color: white;
+        font-weight: bold;
+    }
+
+    th {
+        padding: 12px 15px;
+        text-align: left;
+        font-size: 14px;
+        border-bottom: 2px solid #ffffff;
+    }
+
+    tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    tbody tr:hover {
+        background-color: #efd5ff; 
+    }
+
+    td {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    button {
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-primary:hover, .btn-danger:hover {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+</style>

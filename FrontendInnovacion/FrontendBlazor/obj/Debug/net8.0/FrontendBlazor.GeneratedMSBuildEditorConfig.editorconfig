@@ -1,0 +1,99 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = FrontendBlazor
+build_property.RootNamespace = FrontendBlazor
+build_property.ProjectDir = C:\Users\Isabel Velez\Desktop\Proyecto1\ProyectoCSharp\FrontendInnovacion\FrontendBlazor\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Isabel Velez\Desktop\Proyecto1\ProyectoCSharp\FrontendInnovacion\FrontendBlazor
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/AliadoForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxpYWRvRm9ybS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/AliadoList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxpYWRvTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/AreaConocimientoForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJlYUNvbm9jaW1pZW50b0Zvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/AreaConocimientoList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJlYUNvbm9jaW1pZW50b0xpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/AspectoNormativoForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXNwZWN0b05vcm1hdGl2b0Zvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/AspectoNormativoList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXNwZWN0b05vcm1hdGl2b0xpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/CarInnovacionForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FySW5ub3ZhY2lvbkZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/CarInnovacionList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FySW5ub3ZhY2lvbkxpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/EnfoqueForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRW5mb3F1ZUZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/EnfoqueList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRW5mb3F1ZUxpc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/PracticaEstrategiaForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJhY3RpY2FFc3RyYXRlZ2lhRm9ybS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/PracticaEstrategiaList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJhY3RpY2FFc3RyYXRlZ2lhTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/UniversidadForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdmVyc2lkYWRGb3JtLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Pages/UniversidadList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdmVyc2lkYWRMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-aawyteu4t8
+
+[C:/Users/Isabel Velez/Desktop/Proyecto1/ProyectoCSharp/FrontendInnovacion/FrontendBlazor/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-aynz5fnoul

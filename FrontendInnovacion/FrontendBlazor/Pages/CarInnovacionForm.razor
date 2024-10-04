@@ -1,0 +1,100 @@
+@page "/carinnovacionform/{id:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Car Innovacion</PageTitle>
+
+@code {
+    [Parameter] public int? id { get; set; } // Parámetro opcional para el ID (editar o crear)
+    private FrontendBlazor.Models.CarInnovacion carInnovacion = new FrontendBlazor.Models.CarInnovacion
+    {
+        Nombre = "",
+        Descripcion = "",
+        Tipo = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos de CarInnovacion si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (id.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.CarInnovacion>($"api/CarInnovacion/{id}");
+
+            if (resultado != null)
+            {
+                carInnovacion = resultado;
+            }
+            else
+            {
+                // Manejar el caso en que no se encuentre la CarInnovacion o la API devuelva null
+                Navigation.NavigateTo("/carinnovacion");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar una CarInnovacion
+    private async Task GuardarCarInnovacion()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/CarInnovacion/{id}", carInnovacion);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/CarInnovacion", carInnovacion);
+        }
+
+        // Redirigir a la lista de CarInnovaciones después de guardar
+        Navigation.NavigateTo("/carinnovacion");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/carinnovacion");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar CarInnovacion" : "Nueva CarInnovacion")</strong>
+            </h3>
+
+            <form>
+                <!-- Campo Nombre -->
+                <div class="mb-3">
+                    <label for="nombreCarInnovacion" class="form-label fw-bold">Nombre</label>
+                    <input type="text" id="nombreCarInnovacion" class="form-control" placeholder="Nombre de la CarInnovacion"
+                        @bind="carInnovacion.Nombre" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <!-- Campo Descripción -->
+                <div class="mb-3">
+                    <label for="descripcionCarInnovacion" class="form-label fw-bold">Descripción</label>
+                    <input type="text" id="descripcionCarInnovacion" class="form-control" placeholder="Descripción"
+                        @bind="carInnovacion.Descripcion" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <!-- Campo Tipo -->
+                <div class="mb-3">
+                    <label for="tipoCarInnovacion" class="form-label fw-bold">Tipo</label>
+                    <input type="text" id="tipoCarInnovacion" class="form-control" placeholder="Pública o Privada"
+                        @bind="carInnovacion.Tipo" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarCarInnovacion">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,96 @@
+@page "/aspectonormativoform/{id:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Aspecto Normativo</PageTitle>
+
+@code {
+    [Parameter] public int? id { get; set; } // Parámetro opcional para el ID (editar o crear)
+    private FrontendBlazor.Models.AspectoNormativo aspectoNormativo = new FrontendBlazor.Models.AspectoNormativo
+    {
+        Tipo = "",
+        Descripcion = "",
+        Fuente = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos de AspectoNormativo si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (id.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.AspectoNormativo>($"api/AspectoNormativo/{id}");
+
+            if (resultado != null)
+            {
+                aspectoNormativo = resultado;
+            }
+            else
+            {
+                // Manejar el caso en que no se encuentre el AspectoNormativo o la API devuelva null
+                Navigation.NavigateTo("/aspectonormativo");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar un AspectoNormativo
+    private async Task GuardarAspectoNormativo()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/AspectoNormativo/{id}", aspectoNormativo);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/AspectoNormativo", aspectoNormativo);
+        }
+
+        // Redirigir a la lista de Aspectos Normativos después de guardar
+        Navigation.NavigateTo("/aspectonormativo");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/aspectonormativo");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar Aspecto Normativo" : "Nuevo Aspecto Normativo")</strong>
+            </h3>
+
+            <form>
+                <div class="mb-3">
+                    <label for="tipoAspectoNormativo" class="form-label fw-bold">Tipo</label>
+                    <input type="text" id="tipoAspectoNormativo" class="form-control" placeholder="Tipo"
+                        @bind="aspectoNormativo.Tipo" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcionAspectoNormativo" class="form-label fw-bold">Descripción</label>
+                    <input type="text" id="descripcionAspectoNormativo" class="form-control" placeholder="Descripción"
+                        @bind="aspectoNormativo.Descripcion" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="fuenteAspectoNormativo" class="form-label fw-bold">Fuente</label>
+                    <input type="text" id="fuenteAspectoNormativo" class="form-control" placeholder="Fuente"
+                        @bind="aspectoNormativo.Fuente" style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarAspectoNormativo">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

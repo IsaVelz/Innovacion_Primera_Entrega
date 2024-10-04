@@ -1,0 +1,161 @@
+@page "/universidades"                  
+@inject HttpClient Http                 // Inyección del servicio HttpClient para realizar llamadas a la API
+@inject NavigationManager Navigation    // Inyección del servicio NavigationManager para navegar entre páginas
+@inject IJSRuntime JSRuntime            // Inyección de IJSRuntime para ejecutar funciones JavaScript desde Blazor
+<PageTitle>Universidad</PageTitle>      
+
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<h3><b>Lista de Universidades</b></h3>
+
+<!-- Botón para crear una nueva universidad con margen inferior (espacio) -->
+<button class="btn mb-4" style="background-color: #6a0dad; color: white; border-color: #6a0dad;" @onclick="CrearUniversidad">
+    <i class="fas fa-plus"></i> Nueva Universidad
+</button>
+</div>
+
+@if (universidades == null)
+{
+    <p>Cargando...</p>      // Mientras los datos no están cargados, muestra un mensaje de carga
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th><i class="fas fa-map-marker-alt"></i> Ciudad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var universidad in universidades)
+                {
+                    <tr>
+                        <td>@universidad.Id</td>
+                        <td>@universidad.Nombre</td>
+                        <td>@universidad.Tipo</td>
+                        <td>@universidad.Ciudad</td>
+                        <td>
+                            <!-- Botón para editar la universidad con icono -->
+                            <button class="btn btn-primary btn-sm mr-2" @onclick="() => EditarUniversidad(universidad.Id)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+
+                            <!-- Botón para eliminar la universidad con icono -->
+                            <button class="btn btn-danger btn-sm" @onclick="() => ConfirmarEliminarUniversidad(universidad.Id)">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<FrontendBlazor.Models.Universidad>? universidades;
+
+    // Método que se ejecuta cuando el componente se inicializa, cargando los datos de la API
+    protected override async Task OnInitializedAsync()
+    {
+        // Llama a la API para obtener la lista de universidades y asignarla a la variable 'universidades'
+        universidades = await Http.GetFromJsonAsync<List<FrontendBlazor.Models.Universidad>>("api/universidad");
+    }
+    
+    // Navega a la página de creación de una nueva universidad
+    private void CrearUniversidad()
+    {
+        Navigation.NavigateTo("/universidad");
+    }
+    
+    // Navega a la página de edición de una universidad específica basada en su ID
+    private void EditarUniversidad(int id)
+    {
+        Navigation.NavigateTo($"/universidad/{id}");
+    }
+    
+    // Muestra un cuadro de confirmación para eliminar una universidad
+    private async Task ConfirmarEliminarUniversidad(int id)
+    {   
+        // Muestra un diálogo de confirmación usando JavaScript
+        bool confirmado = await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro de que deseas eliminar esta Universidad?");
+        if (confirmado)
+        {
+            // Si el usuario confirma, procede a eliminar la universidad
+            await EliminarUniversidad(id);
+        }
+    }
+
+    // Método para eliminar una universidad llamando a la API
+    private async Task EliminarUniversidad(int id)
+    {
+        // Envía una solicitud DELETE a la API para eliminar la universidad
+        await Http.DeleteAsync($"api/universidad/{id}");
+        // Después de la eliminación, recarga la lista de universidades desde la API
+        universidades = await Http.GetFromJsonAsync<List<FrontendBlazor.Models.Universidad>>("api/universidad");
+    }
+}
+
+<style>
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    thead {
+        background: linear-gradient(45deg, #6a0dad, #9b59b6);
+        color: white;
+        font-weight: bold;
+    }
+
+    th {
+        padding: 12px 15px;
+        text-align: left;
+        font-size: 14px;
+        border-bottom: 2px solid #ffffff;
+    }
+
+    tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    tbody tr:hover {
+        background-color: #efd5ff; 
+    }
+
+    td {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    button {
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-primary:hover, .btn-danger:hover {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+</style>

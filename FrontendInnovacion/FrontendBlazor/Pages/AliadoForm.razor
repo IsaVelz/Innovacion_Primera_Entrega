@@ -1,0 +1,118 @@
+@page "/aliadoform/{nit:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Aliado</PageTitle>
+
+@code {
+    [Parameter] public int? nit { get; set; } // Parámetro opcional para el Nit (editar o crear)
+    private FrontendBlazor.Models.Aliado aliado = new FrontendBlazor.Models.Aliado
+    {
+        RazonSocial = "",
+        NombreContacto = "",
+        Correo = "",
+        Telefono = "",
+        Ciudad = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos de Aliado si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (nit.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.Aliado>($"api/Aliado/{nit}");
+
+            if (resultado != null)
+            {
+                aliado = resultado;
+            }
+            else
+            {
+                // Manejar el caso en que no se encuentre el Aliado o la API devuelva null
+                Navigation.NavigateTo("/aliado");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar un Aliado
+    private async Task GuardarAliado()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/Aliado/{aliado.Nit}", aliado); // Se envía Nit manualmente
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/Aliado", aliado); // Se envía Nit manualmente
+        }
+
+        // Redirigir a la lista de Aliados después de guardar
+        Navigation.NavigateTo("/aliado");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/aliado");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar Aliado" : "Nuevo Aliado")</strong>
+            </h3>
+            <form>
+                <!-- Campo Nit -->
+                <div class="mb-3">
+                    <label for="nitAliado" class="form-label fw-bold">Nit</label>
+                    <input type="text" id="nitAliado" class="form-control" placeholder="Nit"
+                    @bind="aliado.Nit" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="razonSocialAliado" class="form-label fw-bold">Razón Social</label>
+                    <input type="text" id="razonSocialAliado" class="form-control" placeholder="Razón Social"
+                        @bind="aliado.RazonSocial" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="nombreContactoAliado" class="form-label fw-bold">Nombre Contacto</label>
+                    <input type="text" id="nombreContactoAliado" class="form-control" placeholder="Nombre del Contacto"
+                        @bind="aliado.NombreContacto" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="correoAliado" class="form-label fw-bold">Correo</label>
+                    <input type="email" id="correoAliado" class="form-control" placeholder="Correo"
+                        @bind="aliado.Correo" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefonoAliado" class="form-label fw-bold">Teléfono</label>
+                    <input type="text" id="telefonoAliado" class="form-control" placeholder="Teléfono"
+                        @bind="aliado.Telefono" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="mb-3">
+                    <label for="ciudadAliado" class="form-label fw-bold">Ciudad</label>
+                    <input type="text" id="ciudadAliado" class="form-control" placeholder="Ciudad"
+                        @bind="aliado.Ciudad" required style="border: 1px solid #6a0dad;">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarAliado">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

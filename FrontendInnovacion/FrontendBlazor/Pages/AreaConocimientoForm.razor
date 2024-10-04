@@ -1,0 +1,92 @@
+@page "/areaconocimientoform/{id:int?}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+<PageTitle>Area Conocimiento</PageTitle>
+@code {
+    [Parameter] public int? id { get; set; } // Parámetro opcional para el ID (editar o crear)
+    private FrontendBlazor.Models.AreaConocimiento areaConocimiento = new FrontendBlazor.Models.AreaConocimiento
+    {
+        GranArea = "",
+        Area = "",
+        Disciplina = ""
+    };
+    private bool isEdit = false;
+
+    // Cargar los datos del área de conocimiento si estamos editando
+    protected override async Task OnInitializedAsync()
+    {
+        if (id.HasValue)
+        {
+            isEdit = true;
+            var resultado = await Http.GetFromJsonAsync<FrontendBlazor.Models.AreaConocimiento>($"api/AreaConocimiento/{id}");
+
+            if (resultado != null)
+            {
+                areaConocimiento = resultado;
+            }
+            else
+            {
+                // Manejar el caso en que no se encuentre el área de conocimiento o la API devuelva null
+                Navigation.NavigateTo("/areaconocimiento");
+            }
+        }
+    }
+
+    // Método para guardar o actualizar un área de conocimiento
+    private async Task GuardarAreaConocimiento()
+    {
+        if (isEdit)
+        {
+            await Http.PutAsJsonAsync($"api/AreaConocimiento/{id}", areaConocimiento);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/AreaConocimiento", areaConocimiento);
+        }
+
+        // Redirigir a la lista de áreas de conocimiento después de guardar
+        Navigation.NavigateTo("/areaconocimiento");
+    }
+
+    // Método para salir sin guardar
+    private void Salir()
+    {
+        Navigation.NavigateTo("/areaconocimiento");
+    }
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center" style="color: #6a0dad;">
+                <strong>@(isEdit ? "Editar Área de Conocimiento" : "Nueva Área de Conocimiento")</strong>
+            </h3>
+
+            <form>
+                <div class="mb-3">
+                    <label for="granArea" class="form-label fw-bold">Gran Área</label>
+                    <input type="text" id="granArea" class="form-control" placeholder="Gran Área" @bind="areaConocimiento.GranArea" style="border: 1px solid #6a0dad; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);">
+                </div>
+
+                <div class="mb-3">
+                    <label for="area" class="form-labe fw-bold">Área</label>
+                    <input type="text" id="area" class="form-control" placeholder="Área" @bind="areaConocimiento.Area" style="border: 1px solid #6a0dad; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);">
+                </div>
+
+                <div class="mb-3">
+                    <label for="disciplina" class="form-label fw-bold">Disciplina</label>
+                    <input type="text" id="disciplina" class="form-control" placeholder="Disciplina" @bind="areaConocimiento.Disciplina" style="border: 1px solid #6a0dad; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn" style="background-color: #6a0dad; color: white; border-color: #6a0dad; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="GuardarAreaConocimiento">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn" style="background-color: #808080; color: white; border-color: #808080; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" @onclick="Salir">
+                        Salir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
